@@ -1,10 +1,9 @@
 import 'dart:math' as math;
 
-import 'package:tuple/tuple.dart';
-import 'package:latlong/latlong.dart';
 import 'package:flutter_map/src/core/bounds.dart';
-
 import 'package:flutter_map/src/core/point.dart';
+import 'package:latlong/latlong.dart';
+import 'package:tuple/tuple.dart';
 
 abstract class Crs {
   String get code;
@@ -25,7 +24,8 @@ abstract class Crs {
 
   LatLng pointToLatLng(CustomPoint point, double zoom) {
     var scale = this.scale(zoom);
-    var untransformedPoint = this.transformation.untransform(point, scale.toDouble());
+    var untransformedPoint =
+        this.transformation.untransform(point, scale.toDouble());
     try {
       return projection.unproject(untransformedPoint);
     } catch (e) {
@@ -56,6 +56,36 @@ abstract class Crs {
   Tuple2<double, double> get wrapLat;
 }
 
+class Simple extends Crs {
+  @override
+  String get code => 'Simple';
+
+  @override
+  Projection get projection => LonLat();
+
+  @override
+  Transformation get transformation => Transformation(1, 0, -1, 0);
+
+  @override
+  num scale(double zoom) {
+    return math.pow(2, zoom);
+  }
+
+  @override
+  num zoom(double scale) {
+    return math.log(scale) / math.ln2;
+  }
+
+  @override
+  bool get infinite => true;
+
+  @override
+  Tuple2<double, double> get wrapLat => null;
+
+  @override
+  Tuple2<double, double> get wrapLng => null;
+}
+
 abstract class Earth extends Crs {
   bool get infinite => false;
   final Tuple2<double, double> wrapLng = const Tuple2(-180.0, 180.0);
@@ -81,6 +111,21 @@ abstract class Projection {
   Bounds<double> get bounds;
   CustomPoint project(LatLng latlng);
   LatLng unproject(CustomPoint point);
+}
+
+class LonLat extends Projection {
+  @override
+  Bounds<double> get bounds => Bounds<double>(
+        CustomPoint<double>(-180, -90),
+        CustomPoint<double>(180, 90),
+      );
+
+  @override
+  CustomPoint<double> project(LatLng latlng) =>
+      CustomPoint<double>(latlng.latitude, latlng.longitude);
+
+  @override
+  LatLng unproject(CustomPoint<num> point) => LatLng(point.x, point.y);
 }
 
 class SphericalMercator extends Projection {
