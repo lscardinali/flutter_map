@@ -80,10 +80,10 @@ class Simple extends Crs {
   bool get infinite => true;
 
   @override
-  Tuple2<double, double> get wrapLat => null;
+  Tuple2<double, double> get wrapLat => const Tuple2(-180.0, 180.0);
 
   @override
-  Tuple2<double, double> get wrapLng => null;
+  Tuple2<double, double> get wrapLng => const Tuple2(-90.0, 90.0);
 }
 
 abstract class Earth extends Crs {
