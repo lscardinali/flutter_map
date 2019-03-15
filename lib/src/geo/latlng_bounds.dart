@@ -1,13 +1,15 @@
 import 'dart:math' as math;
+
 import 'package:latlong/latlong.dart';
 
 class LatLngBounds {
-  LatLng sw;
-  LatLng ne;
   LatLngBounds([LatLng corner1, LatLng corner2]) {
     extend(corner1);
     extend(corner2);
   }
+
+  LatLng sw;
+  LatLng ne;
 
   void extend(LatLng latlng) {
     if (latlng == null) {

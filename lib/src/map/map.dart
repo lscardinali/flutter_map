@@ -86,7 +86,7 @@ class MapState {
     _onMoveSink.close();
   }
 
-  void move(LatLng center, double zoom, {hasGesture = false}) {
+  void move(LatLng center, double zoom, {bool hasGesture = false}) {
     zoom = _fitZoomToBounds(zoom);
     final mapMoved = center != _lastCenter || zoom != _zoom;
 
@@ -243,7 +243,7 @@ class MapState {
   Bounds getPixelBounds(double zoom) {
     var mapZoom = zoom;
     var scale = getZoomScale(mapZoom, zoom);
-    var pixelCenter = project(center, zoom).floor();
+    var pixelCenter = project(center, zoom).floor;
     CustomPoint<num> halfSize = size / (scale * 2);
     return new Bounds(pixelCenter - halfSize, pixelCenter + halfSize);
   }

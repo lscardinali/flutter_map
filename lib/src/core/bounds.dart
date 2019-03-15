@@ -1,63 +1,56 @@
 import 'dart:math' as math;
+
 import 'point.dart';
 
 class Bounds<T extends num> {
-  final CustomPoint<T> min;
-  final CustomPoint<T> max;
-
   factory Bounds(CustomPoint<T> a, CustomPoint<T> b) {
-    var bounds1 = new Bounds._(a, b);
-    var bounds2 = bounds1.extend(a);
+    final Bounds<T> bounds1 = Bounds<T>._(a, b);
+    final Bounds<T> bounds2 = bounds1.extend(a);
     return bounds2.extend(b);
   }
 
   const Bounds._(this.min, this.max);
 
+  final CustomPoint<T> min;
+  final CustomPoint<T> max;
+
   Bounds<T> extend(CustomPoint<T> point) {
     CustomPoint<T> newMin;
     CustomPoint<T> newMax;
-    if (this.min == null && this.max == null) {
+    if (min == null && max == null) {
       newMin = point;
       newMax = point;
     } else {
-      var minX = math.min(point.x, this.min.x);
-      var maxX = math.max(point.x, this.max.x);
-      var minY = math.min(point.y, this.min.y);
-      var maxY = math.max(point.y, this.max.y);
-      newMin = new CustomPoint(minX, minY);
-      newMax = new CustomPoint(maxX, maxY);
+      final num minX = math.min(point.x, min.x);
+      final num maxX = math.max(point.x, max.x);
+      final num minY = math.min(point.y, min.y);
+      final num maxY = math.max(point.y, max.y);
+      newMin = CustomPoint<T>(minX, minY);
+      newMax = CustomPoint<T>(maxX, maxY);
     }
-    return new Bounds._(newMin, newMax);
+    return Bounds<T>._(newMin, newMax);
   }
 
-  CustomPoint<double> getCenter() {
-    return new CustomPoint<double>(
-      (min.x + max.x) / 2,
-      (min.y + max.y) / 2,
-    );
-  }
+  CustomPoint<double> getCenter() => CustomPoint<double>(
+        (min.x + max.x) / 2,
+        (min.y + max.y) / 2,
+      );
 
-  CustomPoint<T> get bottomLeft => new CustomPoint(min.x, max.y);
-  CustomPoint<T> get topRight => new CustomPoint(max.x, min.y);
+  CustomPoint<T> get bottomLeft => CustomPoint<T>(min.x, max.y);
+  CustomPoint<T> get topRight => CustomPoint<T>(max.x, min.y);
   CustomPoint<T> get topLeft => min;
   CustomPoint<T> get bottomRight => max;
+  CustomPoint<T> get size => max - min;
 
-  CustomPoint<T> get size {
-    return this.max - this.min;
-  }
+  bool contains(CustomPoint<T> point) =>
+      containsBounds(Bounds<T>(point, point));
 
-  bool contains(CustomPoint<T> point) {
-    var min = point;
-    var max = point;
-    return containsBounds(new Bounds(min, max));
-  }
+  bool containsBounds(Bounds<T> b) =>
+      b.min.x >= min.x &&
+      b.max.x <= max.x &&
+      b.min.y >= min.y &&
+      b.max.y <= max.y;
 
-  bool containsBounds(Bounds<T> b) {
-    return (b.min.x >= this.min.x) &&
-        (b.max.x <= this.max.x) &&
-        (b.min.y >= this.min.y) &&
-        (b.max.y <= this.max.y);
-  }
-
-  String toString() => "Bounds($min, $max)";
+  @override
+  String toString() => 'Bounds($min, $max)';
 }

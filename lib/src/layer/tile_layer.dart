@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_image/network.dart';
 import 'package:flutter_map/src/core/bounds.dart';
 import 'package:flutter_map/src/core/point.dart';
 import 'package:flutter_map/src/core/util.dart' as util;
@@ -10,8 +12,6 @@ import 'package:flutter_map/src/map/map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:tuple/tuple.dart';
-import 'package:flutter_image/network.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 import 'layer.dart';
 
@@ -417,8 +417,8 @@ class _TileLayerState extends State<TileLayer> {
   Bounds _pxBoundsToTileRange(Bounds bounds) {
     var tileSize = this.getTileSize();
     return new Bounds(
-      bounds.min.unscaleBy(tileSize).floor(),
-      bounds.max.unscaleBy(tileSize).ceil() - new CustomPoint(1, 1),
+      bounds.min.unscaleBy(tileSize).floor,
+      bounds.max.unscaleBy(tileSize).ceil - new CustomPoint(1, 1),
     );
   }
 

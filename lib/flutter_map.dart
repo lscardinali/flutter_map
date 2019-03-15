@@ -2,27 +2,29 @@ library flutter_map;
 
 import 'dart:async';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/src/geo/crs/crs.dart';
+import 'package:flutter_map/src/geo/crs/crs_earth_epsg.dart';
 import 'package:flutter_map/src/map/flutter_map_state.dart';
 import 'package:flutter_map/src/map/map.dart';
 import 'package:flutter_map/src/plugins/plugin.dart';
 import 'package:latlong/latlong.dart';
 
-export 'src/plugins/plugin.dart';
-export 'src/layer/layer.dart';
-export 'src/layer/tile_layer.dart';
-export 'src/layer/marker_layer.dart';
-export 'src/layer/polyline_layer.dart';
-export 'src/layer/polygon_layer.dart';
-export 'src/layer/circle_layer.dart';
-export 'src/layer/group_layer.dart';
-export 'src/layer/overlay_image_layer.dart';
+export 'package:flutter_map/src/core/point.dart';
+
 export 'src/geo/crs/crs.dart';
 export 'src/geo/latlng_bounds.dart';
-export 'package:flutter_map/src/core/point.dart';
+export 'src/layer/circle_layer.dart';
+export 'src/layer/group_layer.dart';
+export 'src/layer/layer.dart';
+export 'src/layer/marker_layer.dart';
+export 'src/layer/overlay_image_layer.dart';
+export 'src/layer/polygon_layer.dart';
+export 'src/layer/polyline_layer.dart';
+export 'src/layer/tile_layer.dart';
+export 'src/plugins/plugin.dart';
 
 class FlutterMap extends StatefulWidget {
   /// A set of layers' options to used to create the layers on the map
@@ -48,10 +50,10 @@ class FlutterMap extends StatefulWidget {
     @required this.options,
     this.layers,
     MapController mapController,
-  })  : _mapController = mapController ?? new MapController(),
+  })  : _mapController = mapController ?? MapController(),
         super(key: key);
 
-  FlutterMapState createState() => new FlutterMapState(_mapController);
+  FlutterMapState createState() => FlutterMapState(_mapController);
 }
 
 abstract class MapController {
@@ -67,7 +69,7 @@ abstract class MapController {
   LatLngBounds get bounds;
   double get zoom;
 
-  factory MapController() => new MapControllerImpl();
+  factory MapController() => MapControllerImpl();
 }
 
 typedef TapCallback(LatLng point);
@@ -104,7 +106,7 @@ class MapOptions {
     this.swPanBoundary,
     this.nePanBoundary,
   }) {
-    if (center == null) center = new LatLng(50.5, 30.51);
+    if (center == null) center = LatLng(50.5, 30.51);
     assert(!isOutOfBounds(center)); //You cannot start outside pan boundary
   }
 
